@@ -21,7 +21,7 @@ class test1Controller extends Controller
     /**
      * Handle the incoming request.
      */
-    public function __invoke(Request $request)
+    public function user_test(Request $request)
     {
         // laravel 框架 写简单路由; ORM；Command命令；异步任务；mysql redis
         // 查找
@@ -80,14 +80,12 @@ class test1Controller extends Controller
                 ->command(['php', storage_path('scripts/test1.php')]); // 执行 PHP 脚本
             }
         })->start(function (string $type, string $output, int $key) {
-            // 处理每个进程的输出
-            // 你可以处理标准输出（$output）或错误输出
             echo "进程 {$key} 输出：\n$type\n$output\n";
         });
 
         // 等待所有进程完成
         while ($pool->running()->isNotEmpty()) {
-            // 可以在此添加一些自定义的逻辑，比如输出进程的状态等
+            echo "waiting...\n";
             sleep(1);
         }
 
@@ -97,4 +95,20 @@ class test1Controller extends Controller
         // 你可以在这里使用 $results 处理每个进程的最终输出
         dd($results);  // 输出进程的结果，便于调试
     }
+    public function user_test2(Request $request, $id)
+    {
+        // rememberForever 永久缓存
+        $user = Cache::rememberForever('user_' . $id, function () use ($id) {
+            return DB::table('users')->where('id', $id)->first();
+        });
+
+        // 如果获取的用户数据为空，可以处理这个情况
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        // 返回查询到的用户数据
+        return response()->json($user);
+    }
+
 }
