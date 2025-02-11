@@ -1,11 +1,10 @@
 <?php
 
 namespace App\Listeners;
-use App\Models\schools;
+
+use App\Models\School;
 use Illuminate\Support\Facades\Log;
 use App\Events\SchoolCreated;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
 class LogSchoolCreationListener
 {
@@ -19,17 +18,16 @@ class LogSchoolCreationListener
 
     /**
      * Handle the event.
+     * 当创建学校并且初始化六个班级之后，监视器：log中会生成记录。
      */
     public function handle(SchoolCreated $event): void
     {
-        // school 是 ID，尝试查询学校模型
-
-        $school = schools::query()->find($event->school);
+        $school = School::query()
+            ->find($event->school);
 
         if ($school) {
             Log::info('School Created', [
                 'school_id' => $school->id,
-//                'school_name' => $school->name,
                 'class_count' => $event->classCount,
                 'created_at' => now(),
             ]);

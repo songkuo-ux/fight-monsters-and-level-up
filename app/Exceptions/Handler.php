@@ -57,23 +57,6 @@ class Handler extends ExceptionHandler
             //
         });
     }
-//    //目前只接受get，post请求
-//    public function render($request, Throwable $e)
-//    {
-//        if ($e instanceof AuthorizationException) {
-//            $e = new test1Exception('认证失败，请重新登录', $e);
-//        }
-//        $response = $this->genericResponse($e);
-//        $headers = [
-//            'Access-Control-Allow-Origin' => '*',
-//            'Access-Control-Allow-Headers' => '*',
-//            'Access-Control-Allow-Methods' => 'POST',
-//        ];
-//
-//        $response->headers->add($headers);
-//
-//        return $response;
-//    }
     protected function runningInDebugMode(): bool
     {
         return config('app.debug');

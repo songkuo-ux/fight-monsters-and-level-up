@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\schoolController;
+use App\Http\Controllers\SchoolController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OrgClassController;
 /*
@@ -14,9 +14,11 @@ use App\Http\Controllers\OrgClassController;
 
 */
 
-//Route::get('/', function () { return ('welcome');});
-Route::post('/create/school', [schoolController::class, 'create']);
-Route::post('/create/class', [OrgClassController::class, 'create']);
+Route::get('/', function () {return ('welcome');});
+Route::prefix('create')->group(function () {
+    Route::post('/school', [SchoolController::class, 'create_school'])->name('create.school');
+    Route::post('/class', [OrgClassController::class, 'create_class'])->name('create.class');
+});
 Route::get('/select/class', [OrgClassController::class, 'selectSchool']);
 
 
